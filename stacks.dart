@@ -82,6 +82,12 @@ void main() {
 
   //add element
   stack.push(6);
+  stack.push(7);
+  stack.push(8);
+  print(stack);
+
+  print(stack.pop());
+  print(stack.pop());
   print(stack);
 
   //access element at m
