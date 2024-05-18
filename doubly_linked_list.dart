@@ -121,10 +121,12 @@ class DoubleLinkedList {
     }
   }
 
-  void deleteAtEnd() {
+  Node? deleteAtEnd() {
+    Node? temp = tail;
     Node? curr = tail!.prev;
     curr!.next = null;
     tail = curr;
+    return temp;
   }
 
   void deleteAt(int index) {
