@@ -75,16 +75,53 @@ class Graph {
   late HashSet<Node> _nodes;
   late HashSet<Edge> _edges;
   late HashMap<Node, HashSet<Node>> _adjacentList;
+  late HashMap<Node, int> _adjacentMatrixIndex;
+  late List<List<int>> _adjacentMatrix;
 
   Graph(HashSet<Node> n, HashSet<Edge> e) {
     this._nodes = n;
     this._edges = e;
 
     _adjacentList = HashMap();
+    _adjacentMatrixIndex = HashMap();
+
+    int i = 0;
+    for (Node x in this._nodes) {
+      _adjacentMatrixIndex[x] = i;
+      i++;
+    }
+
+    createAdjacentMatrix(this._nodes.length);
 
     for (Edge e in this._edges) {
       addEdgeToAdjacentList(e);
+      addEdgeToAdjacentMatrix(e);
     }
+  }
+
+  void createAdjacentMatrix(int l) {
+    _adjacentMatrix =
+        List<List<int>>.generate(l, (index) => List<int>.generate(l, (i) => 0));
+  }
+
+  void addEdgeToAdjacentMatrix(Edge e) {
+    int x = _adjacentMatrixIndex[e._source]!;
+    int y = _adjacentMatrixIndex[e._destination]!;
+
+    _adjacentMatrix[x][y] = 1;
+    _adjacentMatrix[y][x] = 1;
+  }
+
+  String printAdjacentMatrix() {
+    String s = "\nAdjacent Matrix-\n  ";
+    s += this._adjacentMatrixIndex.keys.toString() + "\n";
+    for (int i = 0; i < this._adjacentMatrix.length; i++) {
+      s += this._adjacentMatrixIndex.keys.toList()[i].toString() +
+          this._adjacentMatrix[i].toString() +
+          "\n";
+    }
+
+    return s;
   }
 
   void addEdgeToAdjacentList(Edge e) {
@@ -178,7 +215,7 @@ class Graph {
     this._adjacentList.remove(n);
   }
 
-  String getAdjcentList() {
+  String printAdjcentList() {
     String s = "Adjacent List-\n";
 
     for (final x in _adjacentList.keys) {
@@ -204,7 +241,7 @@ class Graph {
       s += e.toString() + "\n";
     }
 
-    return s + getAdjcentList();
+    return s + printAdjcentList() + printAdjacentMatrix();
   }
 }
 
