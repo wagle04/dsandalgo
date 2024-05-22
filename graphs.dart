@@ -278,4 +278,127 @@ void main() {
 
   graph.removeNode(n6);
   print(graph);
+
+  BFS(graph, n5);
+
+  DFS(graph, n5);
+}
+
+void BFS(Graph g, Node startNode) {
+  print("BFS traversing----\n");
+  List<Node> visitedList = [];
+
+  DoubleLinkedQueue<Node> queue = DoubleLinkedQueue<Node>();
+
+  queue.add(startNode);
+
+  Node currentNode = startNode;
+
+  while (queue.isNotEmpty) {
+    currentNode = queue.first;
+    HashSet<Node>? childNodes = g._adjacentList[currentNode];
+    if (childNodes != null) {
+      for (Node n in childNodes) {
+        if (!contains(visitedList, n) && !contains(queue.toList(), n)) {
+          queue.add(n);
+        }
+      }
+    }
+    Node visitedNode = queue.removeFirst();
+    visitedList.add(visitedNode);
+    print(visitedNode);
+  }
+}
+
+void DFS(Graph g, Node startNode) {
+  print("\nDFS traversing----\n");
+  List<Node> visitedList = [];
+
+  Stack stack = Stack([]);
+
+  Node currentNode = startNode;
+  stack.push(currentNode);
+
+  while (stack.isNotEmpty()) {
+    currentNode = stack.pop();
+    HashSet<Node>? childNodes = g._adjacentList[currentNode];
+    if (childNodes != null) {
+      for (Node n in childNodes) {
+        if (!contains(visitedList, n) && !contains(stack.stack, n)) {
+          stack.push(n);
+        }
+      }
+    }
+    visitedList.add(currentNode);
+    print(currentNode);
+  }
+}
+
+bool contains(var list, Node n) {
+  for (Node x in list) {
+    if (x == n) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+class Stack {
+  //original stack is reversed i.e. last element of array is top of stack
+  //to make remove and add time complexity O(1)
+  List<Node>? stack;
+
+  Stack(List<Node> s) {
+    this.stack = s;
+  }
+
+  void push(Node i) {
+    this.stack!.add(i);
+  }
+
+  Node pop() {
+    return this.stack!.removeLast();
+  }
+
+  Node top() {
+    return this.stack!.last;
+  }
+
+  Node? access(int index) {
+    int len = this.stack!.length - 1;
+
+    if (index < 0) {
+      print("Invalid index");
+      return null;
+    }
+
+    if (index > len) {
+      print("Out of index");
+      return null;
+    }
+
+    return this.stack![len - index];
+  }
+
+  bool search(Node i) {
+    int len = this.stack!.length - 1;
+
+    while (len > -1) {
+      if (this.stack![len] == i) {
+        return true;
+      }
+      len--;
+    }
+    return false;
+  }
+
+  bool isNotEmpty() {
+    return this.stack!.length != 0;
+  }
+
+  @override
+  String toString() {
+    return this.stack.toString();
+  }
 }
